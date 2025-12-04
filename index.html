@@ -10,7 +10,7 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f9;
+            background-color: #f0f3f5; /* Nền sáng, hơi xám */
             color: #333;
         }
         .tutorial-container {
@@ -18,17 +18,17 @@
             margin: 30px auto;
             padding: 20px 40px;
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px; /* Bo tròn lớn */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Đổ bóng rõ ràng hơn */
         }
         h1 {
-            color: #004085; /* Màu Tiêu đề Chính */
+            color: #004085;
             border-bottom: 2px solid #004085;
             padding-bottom: 10px;
             margin-top: 0;
         }
         h2 {
-            color: #007bff; /* Màu Tiêu đề Bước */
+            color: #007bff;
             margin-top: 30px;
             padding-top: 10px;
         }
@@ -40,16 +40,16 @@
         .step-guide {
             margin-bottom: 40px;
             padding: 15px;
-            border-left: 5px solid #ccc;
+            border: 1px solid #ccc; /* Thêm border để nhấn mạnh khối */
             background-color: #fafafa;
-            border-radius: 5px;
+            border-radius: 8px; /* Bo tròn cho từng bước */
         }
         .step-guide img {
             max-width: 100%;
             height: auto;
             display: block;
             margin: 20px auto;
-            border-radius: 8px;
+            border-radius: 6px; /* Bo tròn ảnh */
             border: 1px solid #ddd;
         }
         code {
@@ -63,31 +63,30 @@
             background: #2d3436;
             color: #fff;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 5px; /* Bo tròn cho khối code */
             font-family: Consolas, monospace;
             overflow-x: auto;
             margin: 10px 0;
         }
         /* Style cho các khối cảnh báo */
+        .warning-block, .danger-block, .fact-block {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px; /* Bo tròn cho khối cảnh báo */
+        }
         .warning-block {
             background-color: #fff3cd;
-            padding: 15px;
             border-left: 5px solid #ffc107;
-            margin: 15px 0;
             color: #856404;
         }
         .danger-block {
             background-color: #f8d7da;
-            padding: 15px;
             border-left: 5px solid #dc3545;
-            margin: 15px 0;
             color: #721c24;
         }
         .fact-block {
             background-color: #d1ecf1;
-            padding: 15px;
             border-left: 5px solid #17a2b8;
-            margin: 15px 0;
             color: #0c5460;
         }
         a {
@@ -107,7 +106,6 @@
         <p class="intro-text">
             Tài liệu này cung cấp hướng dẫn từng bước để triển khai và thử nghiệm các mô hình Học máy (Machine Learning) cơ bản, tập trung vào việc sao chép (clone) và vận hành một dự án mẫu sử dụng Jupyter Notebook.
         </p>
-        <img src="./images/ml_meme.png" alt="Sơ đồ quy trình triển khai Machine Learning" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
 
         <h2>Các Yếu Tố Cấu Thành Quy Trình Triển khai</h2>
         <p>Quy trình triển khai cơ bản bao gồm các thành phần sau:</p>
