@@ -5,330 +5,287 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hướng Dẫn Toàn Diện Triển Khai Mô Hình Học Máy Cơ Bản</title>
     <style>
+        /* RESET & BASE STYLES */
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
             margin: 0;
-            padding: 20px;
-            background-color: #f0f3f5; /* Nền sáng, hơi xám */
-            color: #333;
+            padding: 0;
+            color: #24292e; /* Màu chữ đen xám nhẹ giống GitHub/Medium */
+            background-color: #ffffff;
         }
-        .tutorial-container {
-            max-width: 900px;
-            margin: 30px auto;
+
+        /* HEADER (Giống ảnh: Phân tích dữ liệu lớn | About) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 20px 40px;
-            background: #fff;
-            border-radius: 10px; /* Bo tròn lớn */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Đổ bóng rõ ràng hơn */
-        }
-        h1 {
-            color: #004085;
-            border-bottom: 2px solid #004085;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        h2 {
-            color: #007bff;
-            margin-top: 30px;
-            padding-top: 10px;
-        }
-        .intro-text {
-            margin-bottom: 30px;
-            font-size: 1.1em;
-            color: #555;
-        }
-        .step-guide {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-bottom: 1px solid #eaeaea; /* Đường gạch mờ */
             margin-bottom: 40px;
-            padding: 15px;
-            border: 1px solid #ccc; /* Thêm border để nhấn mạnh khối */
-            background-color: #fafafa;
-            border-radius: 8px; /* Bo tròn cho từng bước */
         }
-        .step-guide img {
+        
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 300; /* Chữ mảnh */
+            color: #586069;
+        }
+
+        .header-link {
+            font-size: 1rem;
+            color: #24292e;
+            text-decoration: none;
+        }
+
+        /* MAIN LAYOUT */
+        .content-wrapper {
+            max-width: 800px; /* Độ rộng chuẩn cho bài đọc */
+            margin: 0 auto;
+            padding: 0 20px 100px; /* Padding dưới dày để thoáng */
+        }
+
+        /* TYPOGRAPHY GIỐNG ẢNH */
+        h1 {
+            font-size: 2.8rem; /* Tiêu đề rất to */
+            font-weight: 500;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            color: #000;
+        }
+
+        .date {
+            color: #6a737d;
+            font-size: 0.95rem;
+            margin-bottom: 50px;
+            display: block;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-top: 30px;
+            color: #24292e;
+        }
+
+        p, ul, ol {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #24292e;
+        }
+
+        /* CODE BLOCKS (Giống ảnh: Nền xanh nhạt, font monospace) */
+        .code-block, .monospace {
+            background-color: #f1f4fa; /* Màu nền xanh nhạt giống ảnh */
+            padding: 20px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            margin: 20px 0;
+            color: #24292e;
+            line-height: 1.5;
+        }
+
+        code {
+            background-color: #f1f4fa;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        /* IMAGES */
+        img {
             max-width: 100%;
             height: auto;
             display: block;
-            margin: 20px auto;
-            border-radius: 6px; /* Bo tròn ảnh */
-            border: 1px solid #ddd;
+            margin: 30px 0;
+            border-radius: 4px; /* Bo góc nhẹ */
+            /* Không border đậm, giữ vẻ clean */
         }
-        code {
-            background: #e9ecef;
-            padding: 2px 4px;
-            border-radius: 3px;
-            color: #2d3436;
-            font-family: Consolas, monospace;
-        }
-        .monospace {
-            background: #2d3436;
-            color: #fff;
-            padding: 15px;
-            border-radius: 5px; /* Bo tròn cho khối code */
-            font-family: Consolas, monospace;
-            overflow-x: auto;
-            margin: 10px 0;
-        }
-        /* Style cho các khối cảnh báo */
-        .warning-block, .danger-block, .fact-block {
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px; /* Bo tròn cho khối cảnh báo */
-        }
-        .warning-block {
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
-        }
-        .danger-block {
-            background-color: #f8d7da;
-            border-left: 5px solid #dc3545;
-            color: #721c24;
-        }
-        .fact-block {
-            background-color: #d1ecf1;
-            border-left: 5px solid #17a2b8;
-            color: #0c5460;
-        }
+
+        /* LINKS */
         a {
-            color: #007bff;
-            font-weight: bold;
+            color: #0366d6;
             text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
         }
+
+        /* ALERT BLOCKS (Giữ lại để cảnh báo nhưng style tối giản hơn) */
+        .alert-box {
+            padding: 15px 20px;
+            margin: 25px 0;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .alert-warning {
+            background-color: #fff5b1;
+            color: #735c0f;
+        }
+        
+        .alert-danger {
+            background-color: #ffeef0;
+            color: #b31d28;
+        }
+        
+        .alert-info {
+            background-color: #dbedff;
+            color: #0366d6;
+        }
+
+        /* List styling */
+        ul, ol {
+            padding-left: 30px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="tutorial-container">
-        <h1>Giới Thiệu và Tổng Quan Triển Khai Machine Learning (ML Ops Cơ bản)</h1>
-        <p class="intro-text">
-            Tài liệu này cung cấp hướng dẫn từng bước để triển khai và thử nghiệm các mô hình Học máy (Machine Learning) cơ bản, tập trung vào việc sao chép (clone) và vận hành một dự án mẫu sử dụng Jupyter Notebook.
+    <header>
+        <div class="header-title">Triển khai Machine Learning</div>
+        <a href="#" class="header-link">About</a>
+    </header>
+
+    <div class="content-wrapper">
+        
+        <h1>Hướng Dẫn Toàn Diện Triển Khai Mô Hình Học Máy Cơ Bản</h1>
+        <span class="date">Dec 04, 2025</span>
+
+        <h2>I. Tổng Quan (ML Ops Cơ bản)</h2>
+        <p>
+            Tài liệu này cung cấp hướng dẫn từng bước để triển khai và thử nghiệm các mô hình Học máy cơ bản, tập trung vào việc sao chép (clone) và vận hành một dự án mẫu sử dụng Jupyter Notebook.
         </p>
 
-        <h2>Các Yếu Tố Cấu Thành Quy Trình Triển khai</h2>
-        <p>Quy trình triển khai cơ bản bao gồm các thành phần sau:</p>
+        <h3>Các Yếu Tố Cấu Thành</h3>
         <ul>
-            <li><b>CMD (Command Line Interface):</b> Sử dụng dòng lệnh để thực hiện các thao tác quản lý tệp tin, môi trường và giao tiếp với hệ thống kiểm soát phiên bản (Git).</li>
-            <li><b>GitHub:</b> Hệ thống lưu trữ và kiểm soát phiên bản tập trung, nơi mã nguồn dự án được sao chép và đồng bộ hóa.</li>
-            <li><b>Environment (Môi trường Ảo):</b> Khu vực cô lập được tạo ra để chứa các thư viện phụ thuộc của dự án, nhằm ngăn chặn xung đột giữa các phiên bản thư viện khác nhau trên cùng một hệ thống.</li>
-            <li><b>Deploy (Triển khai):</b> Quá trình đưa mô hình từ môi trường phát triển thành một sản phẩm có thể được người dùng cuối tương tác.</li>
+            <li><b>CMD (Command Line Interface):</b> Sử dụng dòng lệnh để thực hiện các thao tác quản lý tệp tin và Git.</li>
+            <li><b>GitHub:</b> Hệ thống lưu trữ mã nguồn.</li>
+            <li><b>Environment:</b> Môi trường ảo chứa thư viện, ngăn chặn xung đột.</li>
+            <li><b>Deploy:</b> Vận hành mô hình thực tế.</li>
         </ul>
 
-        <h2>Cấu trúc Tài liệu Hướng dẫn</h2>
-        <p>Các bước thực hiện được sắp xếp theo trình tự logic như sau:</p>
-        <ol>
-            <li>**Sử dụng Git và CMD:** Thao tác sao chép mã nguồn từ GitHub về máy tính cục bộ.</li>
-            <li>**Cài đặt Môi trường (Environment):** Thiết lập Python và các thư viện phụ thuộc.</li>
-            <li>**Chạy Mô hình Học Máy:** Vận hành và kiểm tra kết quả mô hình K-Means trên Jupyter Notebook.</li>
-        </ol>
-        <p>👉 <b>Hành động:</b> Chuyển sang phần **"Git Clone: Sao Chép Mã Nguồn"** để bắt đầu quá trình.</p>
-    </div>
-
-    <hr>
-
-    <div class="tutorial-container">
-        <h1>Git Clone: Sao Chép Mã Nguồn Dự Án</h1>
-        <p class="intro-text">
-            Lệnh <code>git clone</code> được sử dụng để sao chép toàn bộ kho lưu trữ (Repository) từ máy chủ GitHub về máy tính cá nhân của bạn.
+        <h2>II. Git Clone: Sao Chép Mã Nguồn</h2>
+        <p>
+            Lệnh <code>git clone</code> được sử dụng để sao chép toàn bộ kho lưu trữ (Repository) từ GitHub về máy tính cục bộ.
         </p>
 
-        <div class="step-guide">
-            <h2>Bước 1: Lấy Địa chỉ URL Repository</h2>
-            <p>Tru cập trang GitHub của dự án. Định vị và chọn nút **[<> Code]**, sau đó sao chép địa chỉ URL theo giao thức **HTTPS**.</p>
-            <p>
-                <a href="https://github.com/nguyenhads/advanced_customer_segmentation/tree/master" target="_blank">
-                    Địa chỉ mẫu Repository: https://github.com/nguyenhads/advanced_customer_segmentation/tree/master
-                </a>
-            </p> 		
-            <img src="./images/cmdgit0.png" alt="Minh họa việc sao chép địa chỉ HTTPS trên GitHub" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 2: Chuẩn bị Thư mục Cục bộ</h2>
-            <p>Tạo một thư mục mới tại ổ đĩa mong muốn (ví dụ: ổ D) để chứa mã nguồn. Sao chép đường dẫn tuyệt đối của thư mục này.</p>
-            <img src="./images/cmdgit1.png" alt="Minh họa tạo thư mục mới trên Windows File Explorer" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 3: Thực hiện Lệnh Clone qua CMD</h2>
-            <p>Mở giao diện Command Prompt (CMD) và thực hiện các lệnh sau:</p>
-
-            <div style="background-color: #f8f9fa; padding: 20px; border-left: 5px solid #2ecc71; margin: 20px 0; border-radius: 4px;">
-                <h3 style="margin-top: 0;">🔎 Quy trình Thao tác</h3>
-                <p><b>Thao tác 1: Điều hướng đến Thư mục Dự án</b></p>
-                
-                <p>📝 <b>Cú pháp:</b> <code>cd /d [Tên_Ổ_Đĩa]:\[Đường_Dẫn_Thư_Mục]</code></p>
-                
-                <p>🔻 <b>Ví dụ:</b></p>
-                <div class="monospace">
-                    <code>cd /d D:\MachineLearning\Phan_Cum_KH_K-Means</code>
-                </div>
-                
-                <p><b>Thao tác 2: Sao chép Mã nguồn (Clone)</b></p>
-                
-                <p>📝 <b>Cú pháp:</b> <code>git clone [URL_Git] .</code></p>
-                
-                <p>🔻 <b>Ví dụ:</b></p>
-                <div class="monospace">
-                    <code>git clone https://github.com/nguyenhads/advanced_customer_segmentation.git .</code>
-                </div>
-                <p><i>(Ký tự dấu chấm (<code>.</code>) đảm bảo mã nguồn được sao chép trực tiếp vào thư mục hiện tại, không tạo thêm thư mục con.)</i></p>
-            </div>
-            
-            <p>Chờ quá trình tải dữ liệu hoàn tất. Màn hình không báo lỗi **Fatal** là đã thành công.</p>
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 4: Xác nhận Clone thành công</h2>
-            <p>Sau khi quá trình Git hoàn tất, mã nguồn dự án đã được tải về thư mục cục bộ.</p>
-            <img src="./images/cmdgit3.png" alt="Minh họa quá trình Clone thành công trên CMD" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-            <p>Tiếp theo, tiến hành thiết lập môi trường để chạy code.</p>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="tutorial-container">
-        <h1>Thiết lập Môi trường và Cài đặt Thư viện Phụ thuộc</h1>
-        <p class="intro-text">
-            Sau khi sao chép mã nguồn, cần cài đặt trình thông dịch Python và các thư viện phụ thuộc để dự án có thể hoạt động chính xác.
-        </p>
-
-        <div class="step-guide">
-            <h2>Bước 1: Cài đặt Python 3.10 (Phiên bản ổn định)</h2>
-            <p>Dự án khuyến nghị sử dụng Python 3.10 để đảm bảo tính tương thích với tất cả các thư viện.</p>
-            
-            <p>👉 <b>Liên kết tải:</b> <a href="https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe" target="_blank">Link tải Python 3.10.11 (Bản ổn định)</a></p>
-
-            <div class="warning-block">
-                <h3 style="margin-top: 0; color: #856404;">⚠️ LƯU Ý BẮT BUỘC KHI CÀI ĐẶT</h3>
-                <p>Khi giao diện cài đặt hiển thị, người dùng **bắt buộc** phải tích chọn vào tùy chọn:</p>
-                <p style="font-weight: bold; font-size: 1.2em; color: red;">☑ Add Python 3.10 to PATH</p>
-                <p>Nếu bỏ qua bước này, hệ thống sẽ không nhận diện được lệnh `python` trong CMD, dẫn đến lỗi **"Python is not recognized"**.</p>
-            </div>
-
-            <img src="./images/python.png" alt="Minh họa tích chọn Add Python to PATH khi cài đặt" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px; border: 2px solid red;">
-            
-            <p>Bấm **Install Now** để hoàn tất quá trình cài đặt.</p>
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 2: Kiểm tra Phiên bản Python</h2>
-            <p>Mở CMD và nhập lệnh sau để xác nhận Python đã được cài đặt và thêm vào biến môi trường PATH thành công:</p>
-            <p><code style="background: #e9ecef; padding: 5px 10px; color: #2d3436;">python --version</code></p>
-            <img src="./images/python1.png" alt="Minh họa kiểm tra phiên bản Python trong CMD" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px; border: 2px solid red;">
-            <p>Nếu kết quả hiển thị là <code>Python 3.10.11</code>, quá trình cài đặt cơ bản đã thành công.</p>
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 3: Thiết lập và Cài đặt Thư viện Phụ thuộc</h2>
-            
-            <p><b>Thao tác 1: Điều hướng CMD</b></p>
-            <p>Đảm bảo CMD đang ở đúng thư mục dự án đã sao chép về ở Bước 1.</p>
-
-            <p><b>Thao tác 2: Tạo và Kích hoạt Môi trường ảo</b></p>
-            <p>Việc tạo môi trường ảo (Virtual Environment - `venv`) giúp **cô lập** các gói thư viện, ngăn ngừa xung đột phiên bản và đơn giản hóa việc quản lý dự án.</p>
-            <div class="monospace">
-                <code>python -m venv venv</code><br>
-                <code>.\venv\Scripts\activate</code>
-            </div>
-            <p>Khi thấy tiền tố <code>(venv)</code> xuất hiện trước dòng lệnh, môi trường ảo đã được kích hoạt thành công.</p>
-            <img src="./images/pip_install1.png" alt="Minh họa Kích hoạt Môi trường ảo thành công" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px; border: 2px solid red;">
-
-            <p><b>Thao tác 3: Cài đặt Thư viện từ Tệp Yêu cầu</b></p>
-            <p>Sử dụng tệp `requirements.txt` để cài đặt hàng loạt các thư viện cần thiết (Pandas, NumPy, Scikit-learn,...) cho dự án:</p>
-            <div class="monospace">
-                pip install -r requirements.txt
-            </div>
-            <p>👉 <i>Giải thích:</i> Tệp này liệt kê các **Dependencies** (thư viện phụ thuộc) cùng với phiên bản cụ thể. Lệnh `pip` sẽ tải và cài đặt chúng vào môi trường ảo hiện tại.</p>
-            <img src="./images/pip_install2.png" alt="Màn hình cài đặt thư viện bằng pip" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-            <img src="./images/pip_install4.png" alt="Quá trình cài đặt hoàn tất" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 4: Cài đặt và Khởi chạy Jupyter Notebook</h2>
-            <p>Jupyter Notebook là một công cụ lập trình tương tác (IDE nền web) cần thiết cho việc phát triển và trực quan hóa dữ liệu trong lĩnh vực Machine Learning.</p>
-
-            <p><b>Thao tác 1 & 2: Cài đặt Công cụ</b></p>
-            <p>Trong môi trường ảo đang kích hoạt, cài đặt các gói `ipywidgets` (công cụ tương tác) và `notebook` (công cụ vận hành giao diện web):</p>
-            <div class="monospace">
-                pip install ipywidgets<br>
-                pip install notebook
-            </div>
-            
-            <div class="fact-block">
-                <h3 style="margin-top: 0; color: #0c5460;">💡 THÔNG TIN BỔ SUNG</h3>
-                <p>Tên **Jupyter** là từ ghép giữa ba ngôn ngữ lập trình chính trong Khoa học dữ liệu: **Ju**lia, **Pyt**hon, và **R**. Đây là công cụ tiêu chuẩn để tạo và chạy các tài liệu Notebook.</p>
-            </div>
-
-            <p><b>Thao tác 3: Khởi động Jupyter</b></p>
-            <p>Thực hiện lệnh sau để khởi chạy máy chủ cục bộ và tự động mở giao diện Notebook trên trình duyệt web:</p>
-            <div class="monospace">
-                jupyter notebook
-            </div>
-            <img src="./images/pip_install3.png" alt="Minh họa khởi chạy jupyter notebook trên CMD" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-
-            <p>Hệ thống sẽ mở giao diện quản lý tệp trên trình duyệt. Bạn truy cập vào folder chứa mã nguồn của dự án (ví dụ: <code>advanced_customer_segmentation</code>) là hoàn tất quá trình cài đặt.</p>
-            <img src="./images/pip_install6.png" alt="Minh họa giao diện Jupyter Notebook File Browser" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-            <p>Nếu trình duyệt không tự động mở, bạn có thể dán đường link <code>http://localhost:8888/tree</code> vào thanh địa chỉ.</p>
-            <img src="./images/pip_install5.png" alt="Màn hình hiển thị đường link local host" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-            <h3>Quá trình cài đặt đã hoàn tất. Chuyển sang phần tiếp theo để vận hành Mô hình Học Máy.</h3>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="tutorial-container">
-        <h1>Vận hành Mô hình Học Máy trên Jupyter Notebook</h1>
-        <p class="intro-text">
-            Phần này hướng dẫn các thao tác cơ bản để chạy và kiểm tra kết quả mô hình Phân cụm Khách hàng (K-Means) trong môi trường Jupyter Notebook.
-        </p>
-
-        <div class="step-guide">
-            <h2>Bước 1: Mở Notebook File và Kiểm tra Kernel</h2>
-            <p>Sau khi mở giao diện quản lý tệp, bạn chọn file Notebook của dự án (ví dụ: <code>phan_cum_khach_hang.ipynb</code>) để truy cập giao diện chỉnh sửa.</p>
-            <img src="./images/notebook1.png" alt="Giao diện chính Jupyter Notebook" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-
-            <p>👉 <b>Kiểm tra Kernel:</b> Đảm bảo **Kernel** (nhân xử lý) hiển thị ở góc trên bên phải đang chạy đúng với môi trường ảo đã kích hoạt (ví dụ: <code>Python 3 (ipykernel)</code>). Kernel chịu trách nhiệm thực thi các lệnh Python.</p>
-            <img src="./images/notebook11.png" alt="Kiểm tra Kernel đã được chọn" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-        </div>
-
-        <div class="step-guide">
-            <h2>Bước 2: Thực thi Khối lệnh (Cells)</h2>
-            <p>Mỗi Notebook được cấu tạo từ các **Khối lệnh (Cells)** chứa mã Python hoặc văn bản mô tả. Cần thực thi từng khối lệnh theo trình tự từ trên xuống dưới.</p>
-            <img src="./images/notebook2.png" alt="Cấu trúc Notebook với các Cell code và Markdown" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-            <img src="./images/notebook3.png" alt="Minh họa chạy từng Cell" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-
-            <p><b>Phương pháp Thực thi:</b></p>
-            <ol>
-                <li>Chọn Khối lệnh mong muốn.</li>
-                <li>Sử dụng nút **Run** (biểu tượng mũi tên) trên thanh công cụ, hoặc tổ hợp phím **Shift + Enter**.</li>
-            </ol>
-            
-            <p>Khi Khối lệnh đang chạy, bên cạnh sẽ hiển thị **<code>In [*]</code>**. Sau khi hoàn tất, nó sẽ chuyển thành **<code>In [Số thứ tự]</code>**.</p>
-            
-            <div class="danger-block">
-                <h3 style="margin-top: 0; color: #721c24;">⚠️ NGUYÊN TẮC THỰC THI</h3>
-                <p>Người dùng **bắt buộc** phải thực thi các Khối lệnh **theo thứ tự tuyến tính từ trên xuống dưới**. Việc bỏ qua hoặc chạy sai thứ tự có thể dẫn đến lỗi **<code>NameError</code>** do các biến phụ thuộc chưa được khởi tạo.</p>
-            </div>
-
-            <p>Kết quả đầu ra sẽ hiển thị ngay bên dưới Khối lệnh đã thực thi.</p>
-            <img src="./images/notebook4.png" alt="Kết quả sau khi chạy Cell code" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-
-            <p>Bạn có thể chọn **Run all cells** trên thanh menu để thực thi toàn bộ Notebook (chỉ khuyến nghị khi đã xác nhận code không có lỗi).</p>
-            <img src="./images/notebook5.png" alt="Nút Run All Cells" style="max-width: 80%; display: block; margin: 20px auto; border-radius: 8px;">
-
-        </div>
-
+        <h3>Bước 1: Lấy Địa chỉ URL</h3>
+        <p>Tru cập GitHub, chọn nút <b>[<> Code]</b> và sao chép link HTTPS.</p>
+        <p><a href="https://github.com/nguyenhads/advanced_customer_segmentation/tree/master" target="_blank">Link Repository Mẫu</a></p>
         
-        <div class="step-guide">
-            <h3>🎉 KẾT LUẬN</h3>
-            <p>Bạn đã hoàn thành việc vận hành mô hình Phân cụm Khách hàng K-Means. </p>
-            <p>Đề nghị nghiên cứu kỹ lưỡng các biểu đồ và hình vẽ để nắm bắt ý nghĩa của kết quả Phân cụm Khách hàng. Bạn có thể thử nghiệm thay đổi dữ liệu hoặc số lượng cụm (tham số K) để phân tích sự thay đổi của mô hình. </p>
-            <p>Chúc bạn thành công trong lĩnh vực Phân tích Dữ liệu Lớn.</p>
+        <img src="./images/cmdgit0.png" alt="Sao chép link GitHub">
+
+        <h3>Bước 2: Chuẩn bị Thư mục</h3>
+        <p>Tạo thư mục mới tại ổ đĩa mong muốn (ví dụ ổ D) và copy đường dẫn.</p>
+        <img src="./images/cmdgit12.png" alt="Tạo thư mục">
+
+        <h3>Bước 3: Thực hiện Lệnh trên CMD</h3>
+        <p>Mở CMD và thực hiện lần lượt:</p>
+        <p>Chuyển hướng CMD đến thư mục vừa tạo:</p>
+        <div class="code-block">
+        cd /d D:\MachineLearning\Phan_Cum_KH_K-Means
         </div>
+        <p>Thực hiện lệnh clone:</p>
+        <div class="code-block">
+        git clone https://github.com/nguyenhads/advanced_customer_segmentation.git .
+        </div>
+        <p><i>Lưu ý: Dấu chấm (.) ở cuối lệnh rất quan trọng để clone vào thư mục hiện tại.</i></p>
+        <p>Màn hình xác nhận thành công:</p>
+        <img src="./images/cmdgit3.png" alt="Clone thành công">
+
+        <h2>III. Thiết lập Môi trường (Environment)</h2>
+        <p>Cần cài đặt Python và các thư viện phụ thuộc để dự án hoạt động.</p>
+
+        <h3>Bước 1: Cài đặt Python 3.10</h3>
+        <p><a href="https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe">Tải Python 3.10.11 (Bản ổn định)</a></p>
+
+        <div class="alert-box alert-warning">
+            <b>⚠️ CẢNH BÁO BẮT BUỘC:</b><br>
+            Bạn phải tích chọn <b>☑ Add Python 3.10 to PATH</b> khi cài đặt. Nếu không sẽ gặp lỗi "Python is not recognized".
+        </div>
+
+        <img src="./images/python.png" alt="Tích chọn Add to PATH">
+        
+        <h3>Bước 2: Kiểm tra Phiên bản</h3>
+        <div class="code-block">
+python --version
+        </div>
+        <img src="./images/python1.png" alt="Check version Python">
+
+        <h3>Bước 3: Tạo Môi trường ảo & Cài thư viện</h3>
+        <p>Chạy các lệnh sau trong thư mục dự án:</p>
+        
+        <div class="code-block">
+python -m venv venv
+.\venv\Scripts\activate
+        </div>
+        
+        <p>Sau khi kích hoạt (thấy chữ <code>(venv)</code>), chạy lệnh cài thư viện:</p>
+        <div class="code-block">
+pip install -r requirements.txt
+        </div>
+
+        <img src="./images/pip_install1.png" alt="Kích hoạt venv">
+        <img src="./images/pip_install2.png" alt="Cài đặt requirements">
+        <img src="./images/pip_install4.png" alt="Hoàn tất cài đặt">
+
+        <h3>Bước 4: Cài đặt Jupyter Notebook</h3>
+        <div class="code-block">
+pip install ipywidgets
+pip install notebook
+jupyter notebook
+        </div>
+        
+        <p>Trình duyệt sẽ tự động mở trang quản lý file:</p>
+        <img src="./images/pip_install3.png" alt="Chạy Jupyter">
+        <img src="./images/pip_install6.png" alt="Giao diện Jupyter">
+        <p>Nếu không tự mở, truy cập: <code>http://localhost:8888/tree</code></p>
+        <img src="./images/pip_install5.png" alt="Localhost link">
+
+        <h2>IV. Vận hành Mô hình (K-Means)</h2>
+
+        <h3>Bước 1: Mở Notebook</h3>
+        <p>Chọn file <code>.ipynb</code> trong dự án. Kiểm tra <b>Kernel</b> góc phải trên cùng.</p>
+        <img src="./images/notebook1.png" alt="Giao diện Notebook">
+        <img src="./images/notebook11.png" alt="Check Kernel">
+
+        <h3>Bước 2: Chạy các khối lệnh (Cells)</h3>
+        <p>Sử dụng nút <b>Run</b> hoặc phím <b>Shift + Enter</b>.</p>
+        
+        <div class="alert-box alert-danger">
+            <b>⚠️ NGUYÊN TẮC:</b> Chạy tuần tự từ trên xuống dưới. Không được bỏ qua bước nào để tránh lỗi thiếu biến.
+        </div>
+
+        <img src="./images/notebook2.png" alt="Cấu trúc Cell">
+        <img src="./images/notebook3.png" alt="Nút Run">
+
+        <p>Kết quả hiển thị ngay bên dưới:</p>
+        <img src="./images/notebook4.png" alt="Kết quả chạy">
+        
+        <p>Bạn cũng có thể chọn <b>Run All</b>:</p>
+        <img src="./images/notebook5.png" alt="Run All">
+
+        <div class="alert-box alert-info">
+            <b>🎉 HOÀN THÀNH:</b><br>
+            Bạn đã vận hành thành công mô hình. Hãy nghiên cứu biểu đồ để hiểu rõ hơn về dữ liệu.
+        </div>
+
     </div>
 
 </body>
